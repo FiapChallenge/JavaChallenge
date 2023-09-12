@@ -18,7 +18,7 @@ public class App {
         HashMap<String, Object> themeConfig = new HashMap<>();
         themeConfig.put("theme", "Flat Darcula");
         themeConfig.put("font", "Segoe UI");
-        themeConfig.put("fontSize", 14);
+        themeConfig.put("fontSize", "14");
 
         FlatDarculaLaf.setup();
         try {

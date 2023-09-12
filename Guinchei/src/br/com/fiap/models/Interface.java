@@ -1,6 +1,7 @@
 package br.com.fiap.models;
 
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
@@ -13,6 +14,7 @@ import java.util.Map;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -23,11 +25,17 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.UIManager;
 import javax.swing.table.DefaultTableCellRenderer;
+
+import com.formdev.flatlaf.FlatDarculaLaf;
+import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatIntelliJLaf;
+import com.formdev.flatlaf.FlatLightLaf;
 
 public class Interface {
     public static Usuario login(Sistema sb) {
-        ImageIcon icon = new ImageIcon("GFX/logo/logo.png");
+        ImageIcon icon = new ImageIcon("GFX/images/GuinchoAzul.png");
         while (true) {
             Image image = icon.getImage();
             Image newimg = image.getScaledInstance(80, 80, java.awt.Image.SCALE_SMOOTH);
@@ -83,7 +91,7 @@ public class Interface {
     public static void cadastrar(Sistema sb) {
         while (true) {
 
-            ImageIcon icon = new ImageIcon("GFX/logo/logo.png");
+            ImageIcon icon = new ImageIcon("GFX/images/GuinchoAzul.png");
             Image image = icon.getImage();
             Image newimg = image.getScaledInstance(80, 80, java.awt.Image.SCALE_SMOOTH);
             icon = new ImageIcon(newimg);
@@ -166,10 +174,10 @@ public class Interface {
 
     public static int menu(Usuario usuario) {
         String info = "";
-        String menu = "0 - Sair\n1 - Solicitar Guincho\n2 - Ver Guinchos Disponíveis\n3 - Contato\n4 - Ver meus dados\n5 - Deslogar";
+        String menu = "0 - Sair\n1 - Solicitar Guincho\n2 - Ver Guinchos Disponíveis\n3 - Contato\n4 - Ver meus dados\n5 - Deslogar\n6 - Configurações\n\n";
         int opcao = JOptionPane.showOptionDialog(null, (info + menu), "Guinchei - " + usuario.getNome(), 0,
                 JOptionPane.QUESTION_MESSAGE, usuario.getFoto(),
-                new String[] { "0", "1", "2", "3", "4", "5" }, "1");
+                new String[] { "0", "1", "2", "3", "4", "5", "6" }, "1");
         return opcao;
     }
 
@@ -245,6 +253,10 @@ public class Interface {
                 JOptionPane.showMessageDialog(null, "Preencha todos os campos");
                 Interface.solicitarGuincho(usuario, sb);
             }
+            if (acidenteText.getText().contains(";") || localText.getText().contains(";")) {
+                JOptionPane.showMessageDialog(null, "Caracter inválido: ;");
+                Interface.solicitarGuincho(usuario, sb);
+            }
             if (sb.getCategoria().getCategoria(codigo) == null) {
                 JOptionPane.showMessageDialog(null,
                         "Código Tarifário não encontrado, veja a lista de Código Tarifário");
@@ -310,6 +322,110 @@ public class Interface {
         }
         if (opcao == 2) {
             return;
+        }
+
+    }
+
+    public static void settings(Sistema sb, Map<String, Object> themeConfig) {
+        String[] themes = { "Flat Dark", "Flat Light", "Flat IntelliJ", "Flat Lighter", "Flat Darcula" };
+        String[] fontFamilies = { "Segoe UI", "Arial", "Calibri", "Cambria", "Consolas", "Courier New", "Georgia",
+                "Helvetica", "Lucida Console", "Tahoma", "Times New Roman", "Verdana" };
+        String[] fontSizes = { "10", "12", "14", "16", "18", "20", "22", "24" };
+
+        JComboBox<String> themeBox = new JComboBox<>(themes);
+        JComboBox<String> fontBox = new JComboBox<>(fontFamilies);
+        JComboBox<String> fontSizeBox = new JComboBox<>(fontSizes);
+
+        themeBox.setSelectedItem(themeConfig.get("theme"));
+        fontBox.setSelectedItem(themeConfig.get("font"));
+        fontSizeBox.setSelectedItem(themeConfig.get("fontSize"));
+
+        JLabel themeLabel = new JLabel("Theme");
+        JLabel fontLabel = new JLabel("Font Family");
+        JLabel fontSizeLabel = new JLabel("Font Size");
+
+        JPanel panel = new JPanel(new GridBagLayout());
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(2, 2, 2, 2);
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        panel.add(themeLabel, gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        panel.add(themeBox, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        panel.add(fontLabel, gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        panel.add(fontBox, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        panel.add(fontSizeLabel, gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        panel.add(fontSizeBox, gbc);
+
+        int result = JOptionPane.showOptionDialog(null, panel, "Settings",
+                JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
+                null, new String[] { "OK", "Cancelar" }, "OK");
+
+        if (result == 0) {
+            String theme = (String) themeBox.getSelectedItem();
+            String font = (String) fontBox.getSelectedItem();
+            String fontSize = (String) fontSizeBox.getSelectedItem();
+
+            if (theme.equals("Flat Dark")) {
+                try {
+                    UIManager.setLookAndFeel(new FlatDarkLaf());
+                } catch (Exception ex) {
+                    System.err.println("Failed to initialize LaF");
+                }
+            } else if (theme.equals("Flat Light")) {
+                try {
+                    UIManager.setLookAndFeel(new FlatLightLaf());
+                } catch (Exception ex) {
+                    System.err.println("Failed to initialize LaF");
+                }
+            } else if (theme.equals("Flat IntelliJ")) {
+                try {
+                    UIManager.setLookAndFeel(new FlatIntelliJLaf());
+                } catch (Exception ex) {
+                    System.err.println("Failed to initialize LaF");
+                }
+            } else if (theme.equals("Flat Lighter")) {
+                try {
+                    UIManager.setLookAndFeel(new FlatLightLaf());
+                } catch (Exception ex) {
+                    System.err.println("Failed to initialize LaF");
+                }
+            } else if (theme.equals("Flat Darcula")) {
+                try {
+                    UIManager.setLookAndFeel(new FlatDarculaLaf());
+                } catch (Exception ex) {
+                    System.err.println("Failed to initialize LaF");
+                }
+            }
+
+            UIManager.getLookAndFeelDefaults()
+                    .put("defaultFont", new Font(font, Font.PLAIN, Integer.parseInt(fontSize)));
+
+            themeConfig.put("theme", theme);
+            themeConfig.put("font", font);
+            themeConfig.put("fontSize", fontSize);
         }
 
     }

@@ -5,7 +5,6 @@ Email: gribl88@gmail.com       | Senha: maya
 Email: queiroz@fiap.com.br     | Senha: SouzaS
 Email: thiagoyama@fiap.com.br  | Senha: fiap123
 
-
 👤| Integrantes - RM :
 Augusto Barcelos Barros - 98078
 Gabriel Gribl de Carvalho - 96270
@@ -13,4 +12,7 @@ Gabriel Souza de Queiroz -98570
 Gabriela Zanotto Alves Rodrigues-551629
 
 🖥️| Repositório GitHub:
-https://github.com/Asteriuz/FiapChallenge/
+https://github.com/FiapChallenge/JavaChallenge
+
+📝| Descrição do projeto:
+

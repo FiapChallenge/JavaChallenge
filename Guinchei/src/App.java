@@ -1,11 +1,34 @@
+import java.awt.Font;
+import java.util.HashMap;
+
+import javax.swing.UIManager;
+
+import com.formdev.flatlaf.FlatDarculaLaf;
+import com.formdev.flatlaf.FlatIntelliJLaf;
+
 import br.com.fiap.models.*;
 
 public class App {
-    static boolean debugApp = false;
+    static boolean debugApp = true;
 
     public static void main(String[] args) throws Exception {
         Sistema sb = new Sistema();
         Usuario usuarioLogado = null;
+
+        HashMap<String, Object> themeConfig = new HashMap<>();
+        themeConfig.put("theme", "Flat Darcula");
+        themeConfig.put("font", "Segoe UI");
+        themeConfig.put("fontSize", 14);
+
+        FlatDarculaLaf.setup();
+        try {
+            UIManager.setLookAndFeel(new FlatDarculaLaf());
+        } catch (Exception ex) {
+            System.err.println("Failed to initialize LaF");
+        }
+
+        UIManager.getLookAndFeelDefaults()
+                .put("defaultFont", new Font("Segoe UI", Font.PLAIN, 14));
 
         sb.loadData();
 
@@ -23,7 +46,12 @@ public class App {
                     break;
                 case 0:
                     sb.saveData();
-                    System.exit(0);
+                    try {
+                        UIManager.setLookAndFeel(new FlatIntelliJLaf());
+                    } catch (Exception ex) {
+                        System.err.println("Failed to initialize LaF");
+                    }
+                    // System.exit(0);
                     break;
                 case 1:
                     Interface.solicitarGuincho(usuarioLogado, sb);
@@ -40,6 +68,10 @@ public class App {
                 case 5:
                     usuarioLogado = Interface.login(sb);
                     break;
+                case 6:
+                    Interface.settings(sb, themeConfig);
+                    break;
+
                 default:
                     System.exit(0);
                     break;

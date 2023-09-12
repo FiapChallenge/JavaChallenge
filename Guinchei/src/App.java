@@ -46,12 +46,7 @@ public class App {
                     break;
                 case 0:
                     sb.saveData();
-                    try {
-                        UIManager.setLookAndFeel(new FlatIntelliJLaf());
-                    } catch (Exception ex) {
-                        System.err.println("Failed to initialize LaF");
-                    }
-                    // System.exit(0);
+                    System.exit(0);
                     break;
                 case 1:
                     Interface.solicitarGuincho(usuarioLogado, sb);

@@ -2,12 +2,17 @@ package br.com.fiap.models;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class Sistema {
     private Categoria categoria;
@@ -27,57 +32,97 @@ public class Sistema {
     }
 
     public void saveData() {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter("data.txt"))) {
-            for (Usuario usuario : usuarios) {
-                String row = usuario.getNome() + ";" + usuario.getEmail() + ";" + usuario.getSenha() + ";"
-                        + usuario.getFotopath();
-                bw.write(row);
-                bw.newLine();
+        JSONArray json = new JSONArray();
+        for (Usuario usuario : usuarios) {
+            JSONObject obj = new JSONObject();
+            try {
+                obj.put("nome", usuario.getNome());
+                obj.put("email", usuario.getEmail());
+                obj.put("senha", usuario.getSenha());
+                obj.put("fotopath", usuario.getFotopath());
+                json.put(obj);
+            } catch (JSONException e) {
+                System.out.println("Erro ao salvar arquivo JSON: " + e.getMessage());
             }
-        } catch (IOException e) {
-            System.out.println("Erro ao salvar arquivo");
         }
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter("casos.txt"))) {
-            for (Caso caso : casos) {
-                String row = caso.getAcidente() + ";" + caso.getLocal() + ";" + caso.getDataHora() + ";"
-                        + caso.getTipo() + ";" + caso.getStatus() + ";" + caso.getUsuario().getEmail();
-                bw.write(row);
-                bw.newLine();
+        try {
+            File file = new File("data.json");
+            if (!file.exists()) {
+                file.createNewFile();
             }
+            FileWriter fw = new FileWriter(file.getAbsoluteFile());
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(json.toString());
+            bw.close();
         } catch (IOException e) {
-            System.out.println("Erro ao salvar arquivo");
+            System.out.println("Erro ao salvar arquivo JSON: " + e.getMessage());
+        }
+
+        JSONArray jsonCasos = new JSONArray();
+        for (Caso caso : casos) {
+            JSONObject obj = new JSONObject();
+            try {
+                obj.put("acidente", caso.getAcidente());
+                obj.put("local", caso.getLocal());
+                obj.put("dataHora", caso.getDataHora());
+                obj.put("tipo", caso.getTipo());
+                obj.put("status", caso.getStatus());
+                obj.put("usuario", caso.getUsuario().getEmail());
+                jsonCasos.put(obj);
+            } catch (JSONException e) {
+                System.out.println("Erro ao salvar arquivo JSON: " + e.getMessage());
+            }
+        }
+        try {
+            File file = new File("casos.json");
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            FileWriter fw = new FileWriter(file.getAbsoluteFile());
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(jsonCasos.toString());
+            bw.close();
+        } catch (IOException e) {
+            System.out.println("Erro ao salvar arquivo JSON: " + e.getMessage());
         }
     }
 
     public void loadData() {
-        List<List<String>> data = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader("data.txt"))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] values = line.split(";");
-                data.add(Arrays.asList(values));
+        try {
+            File file = new File("data.json");
+            if (!file.exists()) {
+                System.out.println("Arquivo não encontrado!");
+                return;
+            }
+            String jsonStr = new String(java.nio.file.Files.readAllBytes(file.toPath()));
+            JSONArray json = new JSONArray(jsonStr);
+            for (int i = 0; i < json.length(); i++) {
+                JSONObject obj = json.getJSONObject(i);
+                Usuario usuario = new Usuario(obj.getString("nome"), obj.getString("email"), obj.getString("senha"),
+                        obj.getString("fotopath"));
+                usuarios.add(usuario);
             }
         } catch (Exception e) {
-            System.out.println("Erro ao ler arquivo");
+            System.out.println("Erro ao carregar arquivo JSON: " + e.getMessage());
         }
-        for (List<String> row : data) {
-            Usuario usuario = new Usuario(row.get(0), row.get(1), row.get(2), row.get(3));
-            usuarios.add(usuario);
-        }
-        List<List<String>> dataCasos = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader("casos.txt"))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] values = line.split(";");
-                dataCasos.add(Arrays.asList(values));
+
+        try {
+            File file = new File("casos.json");
+            if (!file.exists()) {
+                System.out.println("Arquivo não encontrado!");
+                return;
+            }
+            String jsonStr = new String(java.nio.file.Files.readAllBytes(file.toPath()));
+            JSONArray json = new JSONArray(jsonStr);
+            for (int i = 0; i < json.length(); i++) {
+                JSONObject obj = json.getJSONObject(i);
+                Usuario usuario = buscarUsuario(obj.getString("usuario"));
+                Caso caso = new Caso(obj.getString("acidente"), obj.getString("local"), obj.getString("dataHora"),
+                        obj.getString("tipo"), obj.getString("status"), usuario);
+                casos.add(caso);
             }
         } catch (Exception e) {
-            System.out.println("Erro ao ler arquivo");
-        }
-        for (List<String> row : dataCasos) {
-            Usuario usuario = buscarUsuario(row.get(5));
-            Caso caso = new Caso(row.get(0), row.get(1), row.get(2), row.get(3), row.get(4), usuario);
-            casos.add(caso);
+            System.out.println("Erro ao carregar arquivo JSON: " + e.getMessage());
         }
     }
 

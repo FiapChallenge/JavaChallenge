@@ -52,7 +52,7 @@ public class Interface {
             panel.add(new JLabel("Digite seu email:"), gbc);
             gbc.gridy++;
             JTextField textField = new JTextField(10);
-            textField.setPreferredSize(new java.awt.Dimension(200, 24));
+            textField.setPreferredSize(new java.awt.Dimension(200, 32));
             panel.add(textField, gbc);
             int result = JOptionPane.showOptionDialog(null, panel, "Guinchei",
                     JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
@@ -97,7 +97,7 @@ public class Interface {
             icon = new ImageIcon(newimg);
 
             JPanel panel = new JPanel(new GridBagLayout());
-            panel.setPreferredSize(new java.awt.Dimension(200, 150));
+            panel.setPreferredSize(new java.awt.Dimension(200, 250));
             GridBagConstraints gbc = new GridBagConstraints();
             gbc.gridx = 0;
             gbc.gridy = 0;
@@ -107,25 +107,25 @@ public class Interface {
             panel.add(new JLabel("Digite seu nome:"), gbc);
             gbc.gridy++;
             JTextField textField = new JTextField(10);
-            textField.setPreferredSize(new java.awt.Dimension(200, 24));
+            textField.setPreferredSize(new java.awt.Dimension(200, 32));
             panel.add(textField, gbc);
             gbc.gridy++;
             panel.add(new JLabel("Digite seu email:"), gbc);
             gbc.gridy++;
             JTextField textField2 = new JTextField(10);
-            textField2.setPreferredSize(new java.awt.Dimension(200, 24));
+            textField2.setPreferredSize(new java.awt.Dimension(200, 32));
             panel.add(textField2, gbc);
             gbc.gridy++;
             panel.add(new JLabel("Digite sua senha:"), gbc);
             gbc.gridy++;
             JTextField textField3 = new JTextField(10);
-            textField3.setPreferredSize(new java.awt.Dimension(200, 24));
+            textField3.setPreferredSize(new java.awt.Dimension(200, 32));
             panel.add(textField3, gbc);
             gbc.gridy++;
             panel.add(new JLabel("(Opcional) Adicione uma foto:"), gbc);
             gbc.gridy++;
             JButton button = new JButton("Selecionar");
-            button.setPreferredSize(new java.awt.Dimension(200, 24));
+            button.setPreferredSize(new java.awt.Dimension(200, 32));
             panel.add(button, gbc);
             JFileChooser file = new JFileChooser();
             file.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -280,7 +280,6 @@ public class Interface {
             return;
         }
         if (opcao == 1) {
-            // create table with Integer and String
             Map<Integer, String> listCategorias = sb.getCategoria().listarCategorias();
             String[] colunas = { "Nacional", "Importado", "Tipo de Veículo" };
             Object[][] dados = new Object[sb.getCategoria().listarCategoriasSemRepeticao().size()][colunas.length];

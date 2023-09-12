@@ -4,7 +4,6 @@ import java.util.HashMap;
 import javax.swing.UIManager;
 
 import com.formdev.flatlaf.FlatDarculaLaf;
-import com.formdev.flatlaf.FlatIntelliJLaf;
 
 import br.com.fiap.models.*;
 
@@ -66,7 +65,6 @@ public class App {
                 case 6:
                     Interface.settings(sb, themeConfig);
                     break;
-
                 default:
                     System.exit(0);
                     break;

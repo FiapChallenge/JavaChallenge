@@ -252,15 +252,18 @@ public class Interface {
                     || codigoNumber.getValue().equals(0)) {
                 JOptionPane.showMessageDialog(null, "Preencha todos os campos");
                 Interface.solicitarGuincho(usuario, sb);
+                return;
             }
             if (acidenteText.getText().contains(";") || localText.getText().contains(";")) {
                 JOptionPane.showMessageDialog(null, "Caracter inválido: ;");
                 Interface.solicitarGuincho(usuario, sb);
+                return;
             }
             if (sb.getCategoria().getCategoria(codigo) == null) {
                 JOptionPane.showMessageDialog(null,
                         "Código Tarifário não encontrado, veja a lista de Código Tarifário");
                 Interface.solicitarGuincho(usuario, sb);
+                return;
             }
             String tipoVeiculo = sb.getCategoria().getCategoria(codigo);
             JOptionPane.showMessageDialog(null,

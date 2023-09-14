@@ -5,10 +5,10 @@ import java.awt.Image;
 import javax.swing.ImageIcon;
 
 public class Usuario {
-    String nome;
-    String email;
-    String senha;
-    String fotopath = "";
+    private String nome;
+    private String email;
+    private String senha;
+    private String fotopath = "";
 
     public String getFotopath() {
         return fotopath;

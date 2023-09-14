@@ -1,12 +1,12 @@
 package br.com.fiap.models;
 
 public class Caso {
-    String acidente;
-    String local;
-    String dataHora;
-    String tipo;
-    String status;
-    Usuario usuario;
+    private String acidente;
+    private String local;
+    private String dataHora;
+    private String tipo;
+    private String status;
+    private Usuario usuario;
 
  
     public Caso(String acidente, String local, String dataHora, String tipo, String status,
